@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import line from "../Assets/Line 3.svg";
+import Swal from "sweetalert2";
 
 export default function AddNotes({ onSave }) {
   const [title, setTitle] = useState("");
@@ -8,11 +9,29 @@ export default function AddNotes({ onSave }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title && !description) {
-      alert("Fill in your title and description or close the form!");
+      // alert("Fill in your title and description or close the form!");
+      Swal.fire({
+        title: 'Success!!!',
+        text: 'Fill in your title and description or close the form!',
+        icon: 'Oops',
+        confirmButtonText: 'Cool'
+      })
     } else if (!title && description) {
-      alert("Fill in your title!");
+      // alert("Fill in your title!");
+      Swal.fire({
+        title: 'Success!!!',
+        text: 'Fill in your title !',
+        icon: 'Oops',
+        confirmButtonText: 'Cool'
+      })
     } else if (title && !description) {
-      alert("Fill in your description!");
+      // alert("Fill in your description!");
+      Swal.fire({
+        title: 'Success!!!',
+        text: 'Fill in your description !',
+        icon: 'Oops',
+        confirmButtonText: 'Cool'
+      })
     } else {
       onSave({ title, description });
     }
@@ -34,7 +53,7 @@ export default function AddNotes({ onSave }) {
       <img src={line} alt="" className="mb-2 mt-3 w-full" />
       <div className="">
         <textarea
-          className="h-14 w-full rounded-[5px] outline-none px-6"
+          className="h-14 w-full rounded-[5px] outline-none px-6 overflow-hidden text-ellipsis whitespace-nowrap"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}

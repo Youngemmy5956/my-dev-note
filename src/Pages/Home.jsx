@@ -6,11 +6,22 @@ import { v4 as uuidv4 } from "uuid";
 import Modal from "react-modal";
 import AddNotes from "../components/AddNotes";
 import Notes from "../components/Notes";
+import {AiOutlineLoading3Quarters} from "react-icons/ai"
+import Swal from 'sweetalert2'
 
 export default function Home() {
   const [notes, setNotes] = useState([]); // Task State
   const [loading, setloading] = useState(true);
   const [modal, setModal] = useState(false);
+
+  const filterNotes = e => { 
+    const search = e.target.value.toLowerCase()
+    const filteredNotes = setNotes.filter(notes => notes.id.toLowerCase().includes(search))
+    setNotes(filteredNotes)
+  }
+  
+
+ 
 
   useEffect(() => {
     setTimeout(() => {
@@ -30,7 +41,13 @@ export default function Home() {
     const id = uuidv4();
     const newNotes = { id, ...note };
     setNotes([...notes, newNotes]);
-    alert("You have successfully added a new note!");
+    // alert("You have successfully added a new note!");
+    Swal.fire({
+      title: 'Success!!!',
+      text: 'You have successfully added a new note!',
+      icon: 'Oops',
+      confirmButtonText: 'Cool'
+    })
     setModal(false);
     localStorage.setItem("noteAdded", JSON.stringify([...notes, newNotes]));
   };
@@ -48,7 +65,13 @@ export default function Home() {
   const deleteNotes = (id) => {
     const deleteNote = notes.filter((note) => note.id !== id);
     setNotes(deleteNote);
-    alert("You have successfully deleted a note!");
+    // alert("You have successfully deleted a note!");
+    Swal.fire({
+      title: 'Success!!!',
+      text: 'You have successfully deleted a note!',
+      icon: 'Oops',
+      confirmButtonText: 'Cool'
+    })
     localStorage.setItem("noteAdded", JSON.stringify(deleteNote));
   };
 
@@ -68,7 +91,13 @@ export default function Home() {
       }
       return item;
     });
-    alert("You have successfully edited an existing note!");
+    // alert("You have successfully edited an existing note!");
+    Swal.fire({
+      title: 'Success!!!',
+      text: 'You have successfully edited an existing note!',
+      icon: 'Oops',
+      confirmButtonText: 'Cool'
+    })
     localStorage.setItem("noteAdded", JSON.stringify(myData));
     window.location.reload();
   };
@@ -97,7 +126,7 @@ export default function Home() {
         <div className="w-full flex justify-center bg-[#E5E5E5]">
           <main className="flex flex-col h-screen justify-between w-[500px] bg-white">
             <header>
-              <span className="flex items-center gap-4 mt-8 pl-6 fixed z-50">
+              <span className="flex items-center gap-4 mt-8 pl-6">
                 <img src={book} alt="book" className="w-7 h-7" />
                 <p>Notes by Skillz</p>
               </span>
@@ -112,7 +141,8 @@ export default function Home() {
                 name=""
                 id=""
                 placeholder="Search"
-                className="border border-[#FA9F5E] rounded-[45px] w-[85%] h-[52px] mx-10 text-lg font-[roboto] pl-8 leading-5 box-border "
+                onChange= { (e) => filterNotes(e)}
+                className="border border-[#FA9F5E] rounded-[45px] w-[85%] h-[75px] mx-10 text-lg font-[roboto] pl-8 leading-5 box-border "
               />
             </section>
 

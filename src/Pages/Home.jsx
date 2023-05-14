@@ -132,7 +132,7 @@ export default function Home() {
               </span>
 
               <img src={line} alt="" className="mb-2 mt-3 w-full" />
-              <img src={line} alt="" className="w-full" />
+              <img src={line} alt="" className=" mb-2 mt-2 w-full" />
             </header>
 
             <section>

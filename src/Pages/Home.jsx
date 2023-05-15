@@ -14,11 +14,14 @@ export default function Home() {
   const [loading, setloading] = useState(true);
   const [modal, setModal] = useState(false);
 
-  const filterNotes = e => { 
-    const search = e.target.value.toLowerCase()
-    const filteredNotes = setNotes.filter(notes => notes.id.toLowerCase().includes(search))
-    setNotes(filteredNotes)
-  }
+  const [filteredNotes, setFilteredNotes] = useState([]);
+
+  
+  // const filterNotes = e => { 
+  //   const search = e.target.value.toLowerCase()
+  //   const filteredNotes = setNotes.filter(notes => notes.id.toLowerCase().includes(search))
+  //   setNotes(filteredNotes)
+  // }
   
 
  
@@ -37,6 +40,23 @@ export default function Home() {
     setModal(false);
   };
 
+
+  const handleSearch = (e) => {
+    const keyword = e.target.value;
+
+    if (keyword !== "") {
+      const results = filteredNotes?.filter((data) => {
+        return (
+          data.title?.toLowerCase().includes(keyword.toLowerCase()) ||
+          data.description?.toLowerCase().includes(keyword.toLowerCase())
+        );
+      });
+      setNotes(results);
+    } else {
+      setNotes(filteredNotes);
+    }
+  };
+
   const addNote = (note) => {
     const id = uuidv4();
     const newNotes = { id, ...note };
@@ -52,15 +72,17 @@ export default function Home() {
     localStorage.setItem("noteAdded", JSON.stringify([...notes, newNotes]));
   };
 
-  // Fetching from Local Storage
-  const getNotes = JSON.parse(localStorage.getItem("noteAdded"));
-  useEffect(() => {
-    if (getNotes == null) {
-      setNotes([]);
-    } else {
-      setNotes(getNotes);
-    }
-  }, []);
+   // Fetching from Local Storage
+   const getNotes = JSON.parse(localStorage.getItem("noteAdded"));
+   useEffect(() => {
+     if (getNotes == null) {
+       setNotes([]);
+       setFilteredNotes([]);
+     } else {
+       setNotes(getNotes);
+       setFilteredNotes(getNotes);
+     }
+   }, []);
 
   const deleteNotes = (id) => {
     const deleteNote = notes.filter((note) => note.id !== id);
@@ -105,7 +127,7 @@ export default function Home() {
   return (
     <>
       {loading ? (
-        <div className="spinnerContainer flex justify-center mt-[450px]">
+        <div className="spinnerContainer flex justify-center mt-[450px] animate-spin">
           <div className="spinner-grow text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
@@ -113,12 +135,6 @@ export default function Home() {
             <span className="visually-hidden">Loading...</span>
           </div>
           <div className="spinner-grow text-success" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <div className="spinner-grow text-danger" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <div className="spinner-grow text-warning" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
@@ -135,16 +151,26 @@ export default function Home() {
               <img src={line} alt="" className=" mb-2 mt-2 w-full" />
             </header>
 
-            <section>
+            {/* <section>
               <input
                 type="search"
                 name=""
                 id=""
                 placeholder="Search"
-                onChange= { (e) => filterNotes(e)}
+                // onChange= { (e) => filterNotes(e)}
+
+                onChange= { (event) => handleSearch(event)}
                 className="border border-[#FA9F5E] rounded-[45px] w-[85%] h-[75px] mx-10 text-lg font-[roboto] pl-8 leading-5 box-border "
               />
-            </section>
+            </section> */}
+
+            <div className="px-6 mt-4">
+          <input
+            className="border border-[#FA9F5E] rounded-full h-14 w-full px-6 outline-none"
+            placeholder="Search..."
+            onChange={(event) => handleSearch(event)}
+          />
+        </div>
 
             <section className="px-6">
               {notes.length > 0 ? (

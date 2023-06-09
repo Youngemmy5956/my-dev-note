@@ -2,23 +2,61 @@ import React, { useState } from "react";
 import book from "../Assets/book.svg";
 import hero from "../Assets/undraw_book_lover_mkck (1) 1.svg";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Signup() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const [input, setInput] = useState({
+    firstName: "",
+    lastName: "",
+    password: "",
+    email: "",
+  });
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
-  const onChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-  const onChangePassword = (e) => {
-    setPassword(e.target.value);
+  const onChangeHandler = (e) => {
+    setInput({ ...input, [e.target.id]: e.target.value });
   };
 
-  const onSubmit = (e) => {
+  // const onChangeEmail = (e) => {
+  //   setEmail(e.target.value);
+  // };
+  // const onChangeFirstName = (e) => {
+  //   setEmail(e.target.value);
+  // };
+  // const onChangeLastName = (e) => {
+  //   setEmail(e.target.value);
+  // };
+  // const onChangePassword = (e) => {
+  //   setPassword(e.target.value);
+  // };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    navigate("/login");
+    setLoading(true);
+
+
+
+
+    try {
+
+      await axios.post("http://localhost:8000/api/auth/register", input)
+        .then((res) => {
+          console.log(res.data);
+          navigate("/login");
+          setLoading(false);
+          alert("Sign up successful");
+        })
+
+      } catch(err) {
+        console.log(err);
+        setLoading(false);
+      
+    }
   };
 
   return (
@@ -36,31 +74,33 @@ export default function Signup() {
 
         <form onSubmit={onSubmit} className="flex flex-col gap-4 mt-12">
         <input
-            type="email"
-            value={email}
+            id="firstName"
+            type="text"
             placeholder="firstName"
-            onChange={onChangeEmail}
+            onChange={onChangeHandler}
             className="h-14 border border-[#FB6900] rounded-[5px] outline-none px-6"
           />
           <input
-            type="email"
-            value={email}
+          id="lastName"
+            type="text"
             placeholder="lastName"
-            onChange={onChangeEmail}
+            onChange={onChangeHandler}
             className="h-14 border border-[#FB6900] rounded-[5px] outline-none px-6"
           />
           <input
+            id="email"
             type="email"
-            value={email}
+            value={input.email}
             placeholder="Email address"
-            onChange={onChangeEmail}
+            onChange={onChangeHandler}
             className="h-14 border border-[#FB6900] rounded-[5px] outline-none px-6"
           />
           <input
+          id="password"
             type="password"
-            value={password}
+            value={input.password}
             placeholder="Password"
-            onChange={onChangePassword}
+            onChange={onChangeHandler}
             className="h-14 border border-[#FB6900] rounded-[5px] outline-none px-6"
           />
           <button className="bg-[#FB6900] text-white text-lg h-14 rounded-[5px] roboto">

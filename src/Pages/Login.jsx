@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import book from "../Assets/book.svg";
 import hero from "../Assets/undraw_book_lover_mkck (1) 1.svg"
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -16,9 +18,29 @@ export default function Login() {
     setPassword(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    navigate("/");
+    setLoading(true);
+
+    const data = {
+      email: email,
+      password: password,
+    };
+
+
+    try {
+      await axios.post("http://localhost:8000/api/auth/login", data)
+      .then((res) => {
+        console.log(res.data);
+        navigate("/");
+        setLoading(false);
+        alert("Login successful")
+      })
+    } catch(err) {
+      console.log(err);
+      setLoading(false);
+    }
+    
   };
 
   return (

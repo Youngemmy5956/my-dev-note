@@ -35,6 +35,20 @@ export default function Signup() {
         </div>
 
         <form onSubmit={onSubmit} className="flex flex-col gap-4 mt-12">
+        <input
+            type="email"
+            value={email}
+            placeholder="firstName"
+            onChange={onChangeEmail}
+            className="h-14 border border-[#FB6900] rounded-[5px] outline-none px-6"
+          />
+          <input
+            type="email"
+            value={email}
+            placeholder="lastName"
+            onChange={onChangeEmail}
+            className="h-14 border border-[#FB6900] rounded-[5px] outline-none px-6"
+          />
           <input
             type="email"
             value={email}

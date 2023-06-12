@@ -44,7 +44,7 @@ export default function Signup() {
 
     try {
 
-      await axios.post("http://localhost:8000/api/auth/register", input)
+      await axios.post("http://localhost:5000/api/auth/register", input)
         .then((res) => {
           console.log(res.data);
           navigate("/login");

@@ -39,7 +39,7 @@ export default function Note({ note, onDelete, onEdit }) {
                       className={`flex items-center px-4 py-2 cursor-pointer font-raleway text-xs ${
                         active ? "bg-gray-100 text-gray-900" : "text-[#828282]"
                       }`}
-                      onClick={() => onDelete(note.id)}
+                      onClick={() => onDelete(note._id)}
                     >
                       Delete
                     </button>

@@ -6,13 +6,15 @@ import { v4 as uuidv4 } from "uuid";
 import Modal from "react-modal";
 import AddNotes from "../components/AddNotes";
 import Notes from "../components/Notes";
-import {AiOutlineLoading3Quarters} from "react-icons/ai"
-import Swal from 'sweetalert2'
+// import {AiOutlineLoading3Quarters} from "react-icons/ai";
+import Swal from 'sweetalert2';
+import axios from "axios";
 
 export default function Home() {
   const [notes, setNotes] = useState([]); // Task State
   const [loading, setloading] = useState(true);
   const [modal, setModal] = useState(false);
+  
 
   const [filteredNotes, setFilteredNotes] = useState([]);
 
@@ -57,63 +59,150 @@ export default function Home() {
     }
   };
 
-  const addNote = (note) => {
-    const id = uuidv4();
-    const newNotes = { id, ...note };
-    setNotes([...notes, newNotes]);
+  // const addNote = (note) => {
+  //   const id = uuidv4();
+  //   const newNotes = { id, ...note };
+  //   setNotes([...notes, newNotes]);
     // alert("You have successfully added a new note!");
-    Swal.fire({
-      title: 'Success!!!',
-      text: 'You have successfully added a new note!',
-      icon: 'Oops',
-      confirmButtonText: 'Cool'
-    })
-    setModal(false);
-    localStorage.setItem("noteAdded", JSON.stringify([...notes, newNotes]));
-  };
+    const addNote = async (note) => {
+      const newNotes = { ...note};
+      try{
+        await axios
+        .post("http://localhost:8000/api/createform", newNotes)
+        .then((res) => {
+          console.log(res.data);
+          alert("You have successfully added a new note!");
+          setModal(false);
+      });
+      } catch(err) {}
+    };
+    // addNote();
+    // alert("You have successfully added a new note!");
+    // useEffect(() => {
+    //   const addNote = async () => {
+    //     try{
+    //       await axios.get("http://localhost:8000/api/getform")
+    //       .then((res) => {
+    //         setNotes(res.data);
+    //         setFilteredNotes(res.data);
+    //     });
+    //     } catch(err) {}
+    //   };
+    //   addNote();
+    // }, []);
+  //   Swal.fire({
+  //     title: 'Success!!!',
+  //     text: 'You have successfully added a new note!',
+  //     icon: 'Oops',
+  //     confirmButtonText: 'Cool'
+  //   })
+  // //   setModal(false);
+  //   localStorage.setItem("noteAdded", JSON.stringify([...notes, newNotes]));
+  // };
 
    // Fetching from Local Storage
-   const getNotes = JSON.parse(localStorage.getItem("noteAdded"));
-   useEffect(() => {
-     if (getNotes == null) {
-       setNotes([]);
-       setFilteredNotes([]);
-     } else {
-       setNotes(getNotes);
-       setFilteredNotes(getNotes);
-     }
-   }, []);
+  //  const getNotes = JSON.parse(localStorage.getItem("noteAdded"));  
+  //    if (getNotes == null) {
+  //      setNotes([]);
+  //      setFilteredNotes([]);
+  //    } else {
+  //      setNotes(getNotes);
+  //      setFilteredNotes(getNotes);
+  //    }
+  //  }, []);
 
-  const deleteNotes = (id) => {
+        
+          const getForm = () => {
+            try{
+               axios.get("http://localhost:8000/api/getform")
+              .then((res) => {
+                setNotes(res.data.form);
+                setFilteredNotes(res.data.form);
+                console.log(res.data);
+            });
+            } catch(err) {}
+          };
+
+          useEffect( getForm , []);
+  // const deleteNotes = (id) => {
+  //   const deleteNote = notes.filter((note) => note.id !== id);
+  //   setNotes(deleteNote);
+  //   alert("You have successfully deleted a note!");
+  //   Swal.fire({
+  //     title: 'Success!!!',
+  //     text: 'You have successfully deleted a note!',
+  //     icon: 'Oops',
+  //     confirmButtonText: 'Cool'
+  //   })
+  //   localStorage.setItem("noteAdded", JSON.stringify(deleteNote));
+  // };
+          
+  const deleteNotes = async (id) => {
     const deleteNote = notes.filter((note) => note.id !== id);
     setNotes(deleteNote);
-    // alert("You have successfully deleted a note!");
-    Swal.fire({
-      title: 'Success!!!',
-      text: 'You have successfully deleted a note!',
-      icon: 'Oops',
-      confirmButtonText: 'Cool'
-    })
-    localStorage.setItem("noteAdded", JSON.stringify(deleteNote));
+    try{
+      await axios.delete(`http://localhost:8000/api/deleteform/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        alert("You have successfully deleted a note!");
+        setModal(false);
+    });
+    } catch(err) {}
   };
 
   // Edit Task
-  const editTask = (id) => {
-    const title = prompt("Title");
-    const description = prompt("Description");
-    const data = JSON.parse(localStorage.getItem("noteAdded"));
-    const myData = data.map((item) => {
-      if (item.id === id) {
-        return {
-          ...item,
-          title: title,
-          description: description,
-          id: uuidv4(),
-        };
-      }
-      return item;
-    });
-    // alert("You have successfully edited an existing note!");
+  // const editTask = (id) => {
+  //   const title = prompt("Title");
+  //   const description = prompt("Description");
+  //   const data = JSON.parse(localStorage.getItem("noteAdded"));
+  //   const myData = data.map((item) => {
+  //     if (item.id === id) {
+  //       return {
+  //         ...item,
+  //         title: title,
+  //         description: description,
+  //         id: uuidv4(),
+  //       };
+  //     }
+  //     return item;
+  //   }); 
+
+    const editTask = async (id) => {
+      const {title, description} = id.body;
+      try{
+        await axios.put(`http://localhost:8000/api/updateform/${id}`, {title, description})
+        .then((res) => {
+          console.log(res.data);
+          alert("You have successfully edited an existing note!");
+          setModal(false);
+      });
+      } catch(err) {}
+    };
+
+    
+
+
+     
+
+
+  // const editTask = async (id) => {
+  //   const {title, description} = id.body;
+  //   try{  
+  //     await axios.put(`http://localhost:8000/api/updateform/${id}`, {title, description})
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       alert("You have successfully edited an existing note!");
+  //       setModal(false);
+  //   });
+  //   } catch(err) {
+  //     console.log(err);
+  //   }
+    
+          
+          
+
+
+    alert("You have successfully edited an existing note!");
     Swal.fire({
       title: 'Success!!!',
       text: 'You have successfully edited an existing note!',
@@ -144,7 +233,7 @@ export default function Home() {
             <header>
               <span className="flex items-center gap-4 mt-8 pl-6">
                 <img src={book} alt="book" className="w-7 h-7" />
-                <p>Notes by Skillz</p>
+                <p>Notes by Skillz By Emmy</p>
               </span>
 
               <img src={line} alt="" className="mb-2 mt-3 w-full" />
@@ -171,7 +260,6 @@ export default function Home() {
             onChange={(event) => handleSearch(event)}
           />
         </div>
-
             <section className="px-6">
               {notes.length > 0 ? (
                 <Notes notes={notes} onDelete={deleteNotes} onEdit={editTask} />

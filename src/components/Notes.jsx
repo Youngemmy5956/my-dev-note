@@ -15,12 +15,11 @@ export default function Notes({ notes, onDelete, onEdit }) {
   const offset = currentPage * PER_PAGE;
   return (
     <>
-      <div className="flex flex-col ">
-        {notes.map((item) => (
-          <Note key={item.id} note={item} onDelete={onDelete} onEdit={onEdit} />
-        ))}{" "}
-      </div>
-
+        <div className="flex flex-col ">
+      {notes.slice(offset, offset + PER_PAGE).map((item) => (
+        <Note key={item.id} note={item} onDelete={onDelete} onEdit={onEdit} />
+      ))}{" "}
+    </div>
       <ReactPaginate
         breakLabel="..."
         previousLabel="< previous"

@@ -151,21 +151,21 @@ export default function Home() {
   };
 
   // Edit Task
-  // const editTask = (id) => {
-  //   const title = prompt("Title");
-  //   const description = prompt("Description");
-  //   const data = JSON.parse(localStorage.getItem("noteAdded"));
-  //   const myData = data.map((item) => {
-  //     if (item.id === id) {
-  //       return {
-  //         ...item,
-  //         title: title,
-  //         description: description,
-  //         id: uuidv4(),
-  //       };
-  //     }
-  //     return item;
-  //   }); 
+  const editTask = (id) => {
+    const title = prompt("Title");
+    const description = prompt("Description");
+    const data = JSON.parse(localStorage.getItem("noteAdded"));
+    const myData = data.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          title: title,
+          description: description,
+          id: uuidv4(),
+        };
+      }
+      return item;
+    }); 
 
     const editTask = async (id) => {
       const {title, description} = id.body;
@@ -178,8 +178,6 @@ export default function Home() {
       });
       } catch(err) {}
     };
-
-    
 
 
      

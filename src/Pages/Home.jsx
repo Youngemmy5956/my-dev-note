@@ -149,6 +149,7 @@ export default function Home() {
     });
     } catch(err) {}
   };
+  useEffect( getForm , []);
 
   // Edit Task
   const editTask = (id) => {
@@ -167,17 +168,7 @@ export default function Home() {
       return item;
     }); 
 
-    const editTask = async (id) => {
-      const {title, description} = id.body;
-      try{
-        await axios.put(`http://localhost:8000/api/updateform/${id}`, {title, description})
-        .then((res) => {
-          console.log(res.data);
-          alert("You have successfully edited an existing note!");
-          setModal(false);
-      });
-      } catch(err) {}
-    };
+    
 
 
      

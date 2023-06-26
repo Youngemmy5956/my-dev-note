@@ -19,7 +19,7 @@ import Login from './Pages/Login';
 function ProtectedRoutes({children}){
   const isAuthenticated = JSON.parse(localStorage.getItem("token"));
   
-  if(isAuthenticated){
+  if(!isAuthenticated){
     return <Navigate to="/login" replace />;
   }
   return children;

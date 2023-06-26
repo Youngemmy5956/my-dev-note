@@ -11,26 +11,26 @@ export default function AddNotes({ onSave }) {
     if (!title && !description) {
       // alert("Fill in your title and description or close the form!");
       Swal.fire({
-        title: 'Success!!!',
+        title: 'Not Successful!!!',
         text: 'Fill in your title and description or close the form!',
         icon: 'Oops',
-        confirmButtonText: 'Cool'
+        confirmButtonText: 'Oops'
       })
     } else if (!title && description) {
       // alert("Fill in your title!");
       Swal.fire({
-        title: 'Success!!!',
+        title: 'Not Successful!!!',
         text: 'Fill in your title !',
         icon: 'Oops',
-        confirmButtonText: 'Cool'
+        confirmButtonText: 'Oops'
       })
     } else if (title && !description) {
       // alert("Fill in your description!");
       Swal.fire({
-        title: 'Success!!!',
+        title: 'Not Success!!!',
         text: 'Fill in your description !',
         icon: 'Oops',
-        confirmButtonText: 'Cool'
+        confirmButtonText: 'Oops  '
       })
     } else {
       onSave({ title, description });
